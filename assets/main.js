@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import VueTour from "vue-tour";
 import Meta from "vue-meta";
 import { Dropdown, Switch } from "buefy";
 import store from "./store";
@@ -12,6 +13,7 @@ Vue.use(VueRouter);
 Vue.use(Meta);
 Vue.use(Dropdown);
 Vue.use(Switch);
+Vue.use(VueTour);
 
 Vue.config.ignoredElements = [/^ion-/];
 
@@ -19,29 +21,29 @@ const routes = [
   {
     path: "/",
     component: Index,
-    name: "default"
+    name: "default",
   },
   {
     path: "/container/:id",
     component: Container,
     name: "container",
-    props: true
+    props: true,
   },
   {
     path: "/settings",
     component: Settings,
-    name: "settings"
-  }
+    name: "settings",
+  },
 ];
 
 const router = new VueRouter({
   mode: "history",
   base: BASE_PATH + "/",
-  routes
+  routes,
 });
 
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount("#app");
