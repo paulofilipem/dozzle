@@ -1,15 +1,20 @@
 <template lang="html">
   <ul class="events" :class="settings.size">
-    <li v-for="item in filtered" :key="item.key">
-      <span class="date">{{ item.date | relativeTime }}</span>
-      <span class="text" v-html="colorize(item.message)"></span>
-    </li>
+    <DynamicScroller :items="filtered" tag="li" key-field="key" minItemSize="25">
+      <template v-slot="{ item, index, active }">
+        <DynamicScrollerItem :item="item" :active="active" :size-dependencies="[item.message]" :data-index="index">
+          <span class="date">{{ item.date | relativeTime }}</span>
+          <span class="text" v-html="colorize(item.message)"></span>
+        </DynamicScrollerItem>
+      </template>
+    </DynamicScroller>
   </ul>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
 import { formatRelative } from "date-fns";
+import { DynamicScroller, DynamicScrollerItem } from "vue-virtual-scroller";
 import AnsiConvertor from "ansi-to-html";
 
 const ansiConvertor = new AnsiConvertor({ escapeXML: true });
@@ -17,7 +22,7 @@ const ansiConvertor = new AnsiConvertor({ escapeXML: true });
 export default {
   props: ["messages"],
   name: "LogViewer",
-  components: {},
+  components: { DynamicScroller, DynamicScrollerItem },
   data() {
     return {
       showSearch: false,
